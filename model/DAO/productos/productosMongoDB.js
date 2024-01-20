@@ -1,29 +1,33 @@
-import { ObjectId } from "mongodb"
-import CnxMongoDB from "../DBMongo.js"
+import CnxMongoDB from "../../DBMongo.js"
+
+import { ProductoModel } from "../models/producto.js"
+
 
 class ModelMongoDB {
 
     obtenerProductos = async () => {
         if(!CnxMongoDB.connection) return []
-        const productos = await CnxMongoDB.db.collection('productos').find({}).toArray()
+        const productos = await ProductoModel.find({})
         return productos
     }
 
     obtenerProducto = async id => {
         if(!CnxMongoDB.connection) return {}
-        const producto = await CnxMongoDB.db.collection('productos').findOne({_id: new ObjectId(id)})
+        const producto = await ProductoModel.findOne({_id: id})
         return producto
     }
 
     guardarProducto = async producto => {
         if(!CnxMongoDB.connection) return {}
-        await CnxMongoDB.db.collection('productos').insertOne(producto)
-        return producto
+
+        const productoModel = new ProductoModel(producto)
+        const productoGuardado = await productoModel.save()
+        return productoGuardado
     }
 
     actualizarProducto = async (id, producto) => {
         if(!CnxMongoDB.connection) return {}
-        await CnxMongoDB.db.collection('productos').updateOne({_id: new ObjectId(id)},{$set: producto})
+        await ProductoModel.updateOne({_id: id},{$set: producto})
 
         const productoActualizado = await this.obtenerProducto(id)
         return productoActualizado
@@ -33,7 +37,7 @@ class ModelMongoDB {
         if(!CnxMongoDB.connection) return {}
 
         const productoEliminado = await this.obtenerProducto(id)
-        await CnxMongoDB.db.collection('productos').deleteOne({_id: new ObjectId(id)})
+        await ProductoModel.deleteOne({_id: id})
 
         return productoEliminado
     }

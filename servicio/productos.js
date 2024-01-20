@@ -1,6 +1,4 @@
-//import ModelMem from '../model/DAO/productosMem.js'
-//import ModelFile from '../model/DAO/productosFile.js'
-import ModelFactory from '../model/DAO/productosFactory.js'
+import ModelFactory from '../model/DAO/productos/productosFactory.js'
 import config from '../config.js'
 import validar from './validaciones/producto.js'
 
@@ -8,8 +6,6 @@ import validar from './validaciones/producto.js'
 class Servicio {
 
     constructor() {
-        //this.model = new ModelMem()
-        //this.model = new ModelFile()
         this.model = ModelFactory.get(config.MODO_PERSISTENCIA)
     }
 
