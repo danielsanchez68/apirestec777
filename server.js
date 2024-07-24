@@ -4,59 +4,54 @@ import { Server } from 'socket.io'
 
 import config from './config.js'
 
-import CnxMongoDB from './model/DBMongo.js'
-
 import RouterProductos from './router/productos.js'
-import RouterCarrito from './router/carrito.js'
+import RouterPedidos from './router/pedidos.js'
 import RouterUsuarios from './router/usuarios.js'
 import RouterMensajes from './router/mensajes.js'
 
 import RouterUpload from './router/upload.js'
 
+import CnxMongoDB from './model/DBMongo.js'
+
 import cors from 'cors'
 import { guarda } from './router/guarda.js'
-
-//https://socket.io/
-//https://www.npmjs.com/package/socket.io
 
 const app = express()
 const http = createServer(app)
 const io = new Server(http, {
-    cors: { origin: "*" }
+    cors: { origin:"*" }
 })
 
-
-app.use(cors())
+app.use(cors())         // Habilito CORS: peticiones al servidor desde orígenes cruzados
 
 app.use(express.static('public'))
 
-app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 
-// ---------------- Atención comunicación WebSockets -----------------
-io.on('connection', new RouterMensajes().start(io))
 
-// ------------------ Rutas / endpoints API RESTful -------------------
-app.use('/api/productos', guarda, new RouterProductos().start())
-app.use('/api/carrito', guarda, new RouterCarrito().start())
-app.use('/api/usuarios', new RouterUsuarios().start())
+// ------------- Atención de comunicación WebSockets -------------
+/* io.on('connection', socket => {
+    console.log('Cliente conectado!')
+}) */
 
-app.use('/api/upload', guarda, new RouterUpload().start())
+io.on('connection', new RouterMensajes(io).config())
 
-// para redirección frontend en producción
-app.get('*', (req,res) => {
-    const { query } = req._parsedOriginalUrl
-    //console.log(url)
-    //console.log(query)
-    res.redirect( '/'+ (query?('?'+query):'') )
-})
+// -------------- Rutas / endpoints API RESTFUL ------------------
+// rutas protegidas
+app.use('/api/productos', guarda, new RouterProductos().config())
+app.use('/api/pedidos', guarda, new RouterPedidos().config())
+app.use('/api/upload', guarda, new RouterUpload().config())
 
+// rutas de libre acceso
+app.use('/api/usuarios', new RouterUsuarios().config())
 
-// ------------------- LISTEN DEL SERVIDOR ---------------------
+// --------------- Listen del Servidor ------------------
 if(config.MODO_PERSISTENCIA == 'MONGODB') {
     await CnxMongoDB.conectar()
 }
 
 const PORT = config.PORT
-const server = http.listen(PORT, () => console.log(`Servidor apiRestful ECommerce escuchando en http://localhost:${PORT}`))
+const server = http.listen(PORT, () => console.log(`Servidor ApiRestful ECommerce escuchando en http://localhost:${PORT}`))
 server.on('error', error => console.log(`Error en servidor: ${error.message}`))
+
+

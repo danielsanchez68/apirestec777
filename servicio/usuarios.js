@@ -1,8 +1,6 @@
 import ModelFactory from '../model/DAO/usuarios/usuariosFactory.js'
 import config from '../config.js'
-
 import jwt from 'jsonwebtoken'
-
 
 class Servicio {
 
@@ -11,26 +9,30 @@ class Servicio {
     }
 
     loginUsuario = async credenciales => {
+        //console.log(credenciales)
         const usuarios = await this.model.obtenerUsuarios()
+        //console.log(usuarios)
 
-        console.log(credenciales)
-        console.log(usuarios)
+        const usuarioLogueadoOK = usuarios.filter(u => u.email === credenciales.email && u.password === credenciales.password)
+        //console.log(usuarioLogueadoOK)
 
-        const usuarioLogueadoOk = usuarios.filter(c => c.usuario === credenciales.usuario && c.password === credenciales.password )
-        if(usuarioLogueadoOk.length === 1) {
-            const usuario = usuarioLogueadoOk[0].usuario
-            const admin = usuarioLogueadoOk[0].admin
+        if(usuarioLogueadoOK.length === 1) {
+            const { nombre, email, admin } = usuarioLogueadoOK[0]
+            const usuario = { nombre, email, admin } 
 
-            //https://www.npmjs.com/package/jsonwebtoken
-            //https://jwt.io/
-            //https://www.jstoolset.com/jwt
+            // https://www.npmjs.com/package/jsonwebtoken
+            // npm i jsonwebtoken
+            // https://jwt.io/
+            // https://www.jstoolset.com/jwt
+            
+
             const payload = {
-                usuario,
-                admin
+                usuario
             }
             const token = jwt.sign(payload, config.LLAVE, { expiresIn: 1200 } )
-            console.log(token)
-            return { status: 'loginOk', usuario, admin, token }
+            //console.log(token)
+
+            return { status: 'loginOk', usuario, token }
         }
         else {
             return { status: 'loginError' }
@@ -38,31 +40,30 @@ class Servicio {
     }
 
     registerUsuario = async credenciales => {
+        //console.log(credenciales)
         const usuarioRegistrado = await this.model.guardarUsuario(credenciales)
         return usuarioRegistrado
     }
 
     validarToken = async datos => {
         const { token } = datos
-
         let rta = {}
+
         if(token) {
-            jwt.verify(token, config.LLAVE, (err, decoded) => {
-                if(err) {
-                    rta = { error: true, mensaje: 'Token no válida' }
+            jwt.verify(token, config.LLAVE, (error, decoded) => {
+                if(error) {
+                    rta = { error: true, mensaje: 'Token no válida'}
                 }
                 else {
-                    rta = { error: false, decoded }
+                    rta = { decoded }
                 }
             })
         }
         else {
-            rta = { error: true, mensaje: 'Token no provista' }
-        }
-
+            rta = { error: true, mensaje: 'Token no provista'}
+        }        
         return rta
     }
 }
 
 export default Servicio
-

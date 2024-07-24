@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-//https://joi.dev/api/?v=17.9.1
+//https://joi.dev/api/?v=17.13.0
 
 const validar = producto => {
     const productoSchema = Joi.object({
@@ -11,11 +11,12 @@ const validar = producto => {
         categoria: Joi.string().required(),
         detalles: Joi.string().required(),
         foto: Joi.string().required(),
-        envio: Joi.required()
+        envio: Joi.boolean().required()
     })
 
+    const { error } = productoSchema.validate(producto);
+    //console.log(error)
 
-    const { error } = productoSchema.validate(producto)
     return error
 }
 

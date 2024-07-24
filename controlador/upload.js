@@ -6,12 +6,16 @@ class Controlador {
         this.servicio = new Servicio()
     }
 
-    recibirArchivo = async (req,res) => {
-        const file = req.file
-        const urlFotoFTP = await this.servicio.guardarArchivoFTP(file)        
-        res.json({urlFotoFTP})
+    recibirArchivo = async (req, res) => {
+        try {
+            const file = req.file
+            const urlFotoFTP = await this.servicio.guardarArchivoFTP(file)
+            res.json({urlFotoFTP})
+        }
+        catch(error) {
+            res.status(500).json({errMsg: error.message})
+        }
     }
 }
-
 
 export default Controlador

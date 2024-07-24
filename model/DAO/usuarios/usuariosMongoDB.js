@@ -4,14 +4,15 @@ import { UsuarioModel } from "../models/usuario.js"
 class ModelMongoDB {
 
     obtenerUsuarios = async () => {
-        if(!CnxMongoDB.connection) return []
+        if(!CnxMongoDB.connectionOK) throw new Error('[ERROR] DAO sin conexión a MongoDB')
         const usuarios = await UsuarioModel.find({})
         return usuarios
     }
+    
+    guardarUsuario = async usuario => {
+        if(!CnxMongoDB.connectionOK) throw new Error('[ERROR] DAO sin conexión a MongoDB')
 
-    guardarUsuario = async credenciales => {
-        if(!CnxMongoDB.connection) return {}
-        const usuarioModel = new UsuarioModel(credenciales)
+        const usuarioModel = new UsuarioModel(usuario)
         const usuarioGuardado = await usuarioModel.save()
         return usuarioGuardado
     }

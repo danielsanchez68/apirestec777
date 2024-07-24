@@ -1,10 +1,10 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
 const mensajeSchema = mongoose.Schema({
     autor: String,
     texto: String,
     admin: Boolean,
     fyh: String
-},{versionKey: false})
+}, { versionKey: false })
 
-export const MensajeModel = mongoose.model('mensajes', mensajeSchema)
+export const MensajeModel = mongoose.model('pruebas', mensajeSchema)

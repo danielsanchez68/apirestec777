@@ -1,19 +1,19 @@
-import ModelMongoDB from "../usuarios/usuariosMongoDB.js"
-import ModelMem from "../usuarios/usuariosMem.js"
+import ModelMem from "./usuariosMem.js";
+import ModelMongoDB from "./usuariosMongoDB.js";
 
 class ModelFactory {
     static get(tipo) {
-        switch (tipo) {
+        switch(tipo) {
             case 'MEM':
-                console.log('**** usuarios Persistiendo en Memoria ****')
+                console.log('**** Usuarios Persistiendo en Memoria ****')
                 return new ModelMem()
 
             case 'MONGODB':
-                console.log('**** usuarios Persistiendo en MongoDB ****')
+                console.log('**** Usuarios Persistiendo en Database MongoDB ****')
                 return new ModelMongoDB()
 
             default:
-                console.log('**** usuarios Persistiendo en Memoria (default) ****')
+                console.log('**** Usuarios Persistiendo en Memoria (default) ****')
                 return new ModelMem()
         }
     }

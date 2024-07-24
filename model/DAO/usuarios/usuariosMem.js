@@ -5,11 +5,12 @@ class ModelMem {
     }
 
     obtenerUsuarios = async () => this.usuarios
+    
+    guardarUsuario = async usuario => {
+        usuario.id = String(+(this.usuarios[this.usuarios.length - 1]?.id || 0) + 1)
 
-    guardarUsuario = async credenciales => {
-        credenciales.id = String(parseInt(this.usuarios[this.usuarios.length-1]?.id || 0) + 1)
-        this.usuarios.push(credenciales)
-        return credenciales
+        this.usuarios.push(usuario)
+        return usuario
     }
 }
 

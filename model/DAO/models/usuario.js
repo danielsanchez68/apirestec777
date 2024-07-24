@@ -1,9 +1,10 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
 const usuarioSchema = mongoose.Schema({
-    usuario: String,
+    nombre: String,
+    email: String,
     password: String,
     admin: Boolean
-},{versionKey: false})
+}, { versionKey: false })
 
 export const UsuarioModel = mongoose.model('usuarios', usuarioSchema)

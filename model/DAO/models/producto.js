@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
 const productoSchema = mongoose.Schema({
     nombre: String,
@@ -8,7 +8,7 @@ const productoSchema = mongoose.Schema({
     categoria: String,
     detalles: String,
     foto: String,
-    envio: Boolean
-},{versionKey: false})
+    envio: Boolean,
+}, { versionKey: false })
 
 export const ProductoModel = mongoose.model('productos', productoSchema)

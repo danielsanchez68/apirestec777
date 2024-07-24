@@ -1,18 +1,16 @@
-import ModelMongoDB from "./mensajesMongoDB.js"
-import ModelMem from "./mensajesMem.js"
+import ModelMem from "./mensajesMem.js";
+import ModelMongoDB from "./mensajesMongoDB.js";
 
 class ModelFactory {
     static get(tipo) {
-        switch (tipo) {
+        switch(tipo) {
             case 'MEM':
                 console.log('**** Mensajes Persistiendo en Memoria ****')
                 return new ModelMem()
 
             case 'MONGODB':
-                console.log('**** Mensajes Persistiendo en MongoDB ****')
+                console.log('**** Mensajes Persistiendo en Database MongoDB ****')
                 return new ModelMongoDB()
-                /* console.log('**** Mensajes Persistiendo en Memoria ****')
-                return new ModelMem() */
 
             default:
                 console.log('**** Mensajes Persistiendo en Memoria (default) ****')

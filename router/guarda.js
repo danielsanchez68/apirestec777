@@ -1,13 +1,14 @@
 import jwt from 'jsonwebtoken'
 import config from '../config.js'
 
-export const guarda = (req,res,next) => {
+export const guarda = (req, res, next) => {
     const token = req.headers['access-token']
+    //console.log('token', token)
 
     if(token) {
-        jwt.verify(token, config.LLAVE, (err, decoded) => {
-            if(err) {
-                res.json({mensaje: 'Token no válida'})
+        jwt.verify(token, config.LLAVE, (error, decoded) => {
+            if(error) {
+                res.json({ error: true, mensaje: 'Token no válida'})
             }
             else {
                 req.decoded = decoded
@@ -16,6 +17,6 @@ export const guarda = (req,res,next) => {
         })
     }
     else {
-        res.json({mensaje: 'Token no provista'})
+        res.json({ error: true, mensaje: 'Token no provista'})
     }
 }

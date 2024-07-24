@@ -1,1 +1,1 @@
-Esta carpeta se utiliza para almacenar temporalmente los archivo que van a ser subidos posteriormente al un servidor FTP.
+Esta carpeta se utiliza para almacenar las fotos de productos subidos al servidor

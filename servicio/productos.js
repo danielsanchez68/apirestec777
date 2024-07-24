@@ -1,5 +1,6 @@
 import ModelFactory from '../model/DAO/productos/productosFactory.js'
 import config from '../config.js'
+
 import validar from './validaciones/producto.js'
 
 
@@ -10,30 +11,18 @@ class Servicio {
     }
 
     obtenerProductos = async id => {
-        if(id) {
-            const producto = await this.model.obtenerProducto(id)
-            return producto
-        }
-        else {
-            const productos = await this.model.obtenerProductos()
-            return productos
-        }
+        if(id) return await this.model.obtenerProducto(id)
+        else return await this.model.obtenerProductos()
     }
 
     guardarProducto = async producto => {
         const error = validar(producto)
-        if(!error) {
-            const productoGuardado = await this.model.guardarProducto(producto)
-            return productoGuardado
-        }
-        else {
-            //console.log(error.details[0].message)
-            //return {}
-            throw new Error(error.details[0].message)
-        }
+        if(error) throw new Error(`Error de formato en campos del producto: ${error.details[0].message}`)
+        const productoGuardado = await this.model.guardarProducto(producto)
+        return productoGuardado
     }
 
-    actualizarProducto = async (id,producto) => {
+    actualizarProducto = async (id, producto) => {
         const productoActualizado = await this.model.actualizarProducto(id,producto)
         return productoActualizado
     }
@@ -45,4 +34,3 @@ class Servicio {
 }
 
 export default Servicio
-

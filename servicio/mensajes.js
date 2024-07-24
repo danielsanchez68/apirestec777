@@ -1,7 +1,6 @@
 import ModelFactory from '../model/DAO/mensajes/mensajesFactory.js'
 import config from '../config.js'
 
-
 class Servicio {
 
     constructor() {
@@ -20,4 +19,3 @@ class Servicio {
 }
 
 export default Servicio
-
